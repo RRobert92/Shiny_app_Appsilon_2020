@@ -27,5 +27,6 @@ Ship_list <<- tibble(unique(Ships_Data[,c('ship_type','SHIPNAME')]))
 source("bin/Utility/Button_Settings.R")
 
 # Global Functions  ------------------------------------------------------------
+source("bin/Tools/Data_Collector.R")
 
 # Test Unit --------------------------------------------------------------------

@@ -1,5 +1,5 @@
 ################################################################################
-# Shiny main page button
+# Module: main page button
 #
 # (c) 2020 Kiewisz
 # This code is licensed under GPL V3.0 license (see LICENSE.txt for details)
@@ -37,18 +37,15 @@ Buttons_server <- function(input, output, session) {
 
 Map_server <- function(input, output, session){
   observeEvent(input$`Update_value`, {
-    assign("Ship_Data_df",
-           Ships_Data %>% filter(ship_type == input[["ship_type_dropdown"]]),
-           envir = .GlobalEnv)
-    assign("Ship_Data_df",
-           Ship_Data_df %>% filter(SHIPNAME == input[["ship_name_dropdown"]]),
-           envir = .GlobalEnv)
+    # for debugging
+    Ship_types <<- input[["ship_type_dropdown"]]
+    Ship_IDs <<- input[["ship_name_dropdown"]]
     
     output$ship_map <- renderLeaflet({
       leaflet() %>% 
         addProviderTiles(providers$Stamen.TonerLite,
                          options = providerTileOptions(noWrap = TRUE)) %>% 
-        addMarkers(data = Ship_Data_df[1:2])
+        addMarkers(data = Filter_by_ID(Ship_types, Ship_IDs))
     })
   })
 }

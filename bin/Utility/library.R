@@ -11,6 +11,9 @@
 # Shiny library ----------------------------------------------------------------
 library("shiny")
 library("shiny.semantic")
+library("readr")
 
 # Global library ---------------------------------------------------------------
 library("leaflet")
+library("tidyverse")
+library("purrr")

@@ -40,12 +40,13 @@ Map_server <- function(input, output, session){
     # for debugging
     Ship_types <<- input[["ship_type_dropdown"]]
     Ship_IDs <<- input[["ship_name_dropdown"]]
+    Ship_data_selected <<- Filter_by_ID(Ship_types, Ship_IDs)
     
     output$ship_map <- renderLeaflet({
       leaflet() %>% 
         addProviderTiles(providers$Stamen.TonerLite,
                          options = providerTileOptions(noWrap = TRUE)) %>% 
-        addMarkers(data = Filter_by_ID(Ship_types, Ship_IDs))
+        addMarkers(data = Ship_data_selected[1:2])
     })
   })
 }

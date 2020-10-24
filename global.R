@@ -22,8 +22,9 @@ options(shiny.port = 7878)
 options(semantic.themes = TRUE)
 
 # Global settings  -------------------------------------------------------------
-Ships_Data <<- read_csv("Data/ships.csv")
+Ships_Data <<- readRDS("Data/ship_trim.rds")
 Ship_list <<- tibble(unique(Ships_Data[,c('ship_type','SHIPNAME')]))
+
 source("bin/Utility/Button_Settings.R")
 
 # Global Functions  ------------------------------------------------------------

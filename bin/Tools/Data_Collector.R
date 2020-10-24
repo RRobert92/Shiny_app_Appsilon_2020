@@ -50,7 +50,7 @@ Filter_by_ID <- function(x, y){
     }
     
     df_df <- tibble()
-    longest <- df[which.max(Ship_Data_output$...1):as.numeric(which.max(Ship_Data_output$...1)+1), 1:26]
+    longest <- df[which.max(Ship_Data_output$...1):as.numeric(which.max(Ship_Data_output$...1)+1),]
     
     j = 1
     while (j < nrow(Ship_Data_output)) {
@@ -68,7 +68,7 @@ Filter_by_ID <- function(x, y){
     if(nrow(df_df) > 0){
       for (j in 1:nrow(df_df)) {
         df_bin <- rbind(df_bin,
-                        df[as.numeric(df_df[j,3]):as.numeric(df_df[j,3]+1), 1:26])
+                        df[as.numeric(df_df[j,3]):as.numeric(df_df[j,3]+1),])
       }
 
     } 

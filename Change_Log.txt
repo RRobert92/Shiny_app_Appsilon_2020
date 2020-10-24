@@ -13,9 +13,14 @@
 ################################################################################
 
 # Mejor changes  ---------------------------------------------------------------
+  - Build the app
+  - Added function for data collection and filtering of ship data set
+  - Build modules for data selection from the UI
 
 # Minor changes ----------------------------------------------------------------
 
 # Bug Fix ----------------------------------------------------------------------
-
+  - Bugfix in Data_Collector.R when using trimed data
+  
 # Other ------------------------------------------------------------------------
+  - Trimed data to fit on shinyapps.io

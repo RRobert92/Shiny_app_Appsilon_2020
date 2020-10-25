@@ -12,9 +12,9 @@
 
 shinyUI(
   semanticPage(
-  title = App_title,
-  
-  sidebar("Home"),
-  Cards_data()
-)
+    title = App_title,
+
+    sidebar("Home"),
+    Cards_data()
+  )
 )

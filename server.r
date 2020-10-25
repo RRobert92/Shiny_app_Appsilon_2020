@@ -10,8 +10,6 @@
 
 # Shiny Server  ----------------------------------------------------------------
 function(input, output, session) {
-  
   callModule(Buttons_server, "Home")
   callModule(Map_server, "Home")
-
-  }
+}

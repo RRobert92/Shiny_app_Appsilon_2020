@@ -1,5 +1,5 @@
 ################################################################################
-# Module Read data
+# Module Read data & data preparation for appshiny.io
 #
 # (c) 2020 Kiewisz
 # This code is licensed under GPL V3.0 license (see LICENSE.txt for details)
@@ -10,7 +10,7 @@
 
 # Load list of ship types and ship names and time it for appshiny.io
 
-# Ships_Data <- read_csv("Data/ships.csv")
+#Ships_Data <- read_csv("Data/ships.csv")
 #Ships_Data <- tibble(Ships_Data[1],
 #                     Ships_Data[2],
 #                     Ships_Data[3],
@@ -23,10 +23,10 @@
 #                     Ships_Data[21],
 #                     Ships_Data[24])
 #
-# Ship_list <- tibble(Ships_Data[20],
-#                     Ships_Data[24])
+#Ship_list <- tibble(Ships_Data[20],
+#                    Ships_Data[24])
 #write_rds(Ship_list, "Data/Ship_list.rds")
-
+#
 #for(i in unique(Ship_list$ship_type)){
 #  assign(i,
 #         Ships_Data %>% filter(ship_type == i))

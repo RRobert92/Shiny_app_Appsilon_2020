@@ -9,7 +9,8 @@
 # - find LAT and LON when the ship traveled the same distance at the same time
 #   between two consecutive observations
 #
-# x for the function related to the list of selected ship_names
+# x for the function related to the list of selected ship_type
+# y for the function related to the list of selected ship_name or names
 #
 # (c) 2020 Kiewisz
 # This code is licensed under GPL V3.0 license (see LICENSE.txt for details)
@@ -20,6 +21,7 @@
 
 Filter_by_ID <- function(x, y){
   
+  # Retrieve correct data based Ship_type and filter it for ship_names
   Collected_points <- tibble()
   Ship_Data_df <<- read_rds(paste("Data/", x, ".rds", sep = ""))
   Ship_Data_df <<-  Ship_Data_df %>% filter(SHIPNAME %in% y)
@@ -27,7 +29,7 @@ Filter_by_ID <- function(x, y){
   
   for (i in y) {
     df <- Ship_Data_df %>% filter(SHIPNAME == i)
-    df <- df[order(df$DATETIME),]
+    df <- df[order(df$DATETIME), ]
     
     j = 1
     Ship_Data_output <- tibble()
@@ -38,27 +40,26 @@ Filter_by_ID <- function(x, y){
       df_df <- as.matrix(df[j:as.numeric(j+1), 1:2])
       
       tryCatch({
-             Ship_Data_output[j,1] <- round(as.numeric(geo_point_dist(df_df)), 
+             Ship_Data_output[j, 1] <- round(as.numeric(geo_point_dist(df_df)), 
                                             3)
-             
       },
       warning = function(w){}
       )
-      if(is.na(Ship_Data_output[j,1])){
+      if(is.na(Ship_Data_output[j, 1])){
         
-        Ship_Data_output[j,1] <- 0
+        Ship_Data_output[j, 1] <- 0
       }
       
-      Ship_Data_output[j,2] <- round(as.numeric(df[as.numeric(j+1), "DATETIME"] - df[j, "DATETIME"]), 
+      Ship_Data_output[j, 2] <- round(as.numeric(df[as.numeric(j+1), "DATETIME"] - df[j, "DATETIME"]), 
                                      2)
-      Ship_Data_output[j,3] <- j
+      Ship_Data_output[j, 3] <- j
       
       j = j + 1
     }
     
-    # Find longes traveled distance
+    # Find longest traveled distance
     df_df <- tibble()
-    longest <- df[which.max(Ship_Data_output$...1):as.numeric(which.max(Ship_Data_output$...1)+1),]
+    longest <- df[which.max(Ship_Data_output$...1):as.numeric(which.max(Ship_Data_output$...1)+1), ]
     
     # Find when the ship traveled the with the same speed over the same travel time
     j = 1
@@ -67,8 +68,8 @@ Filter_by_ID <- function(x, y){
         
         df_df[j, 1:3] <- as.numeric(NA)
       } else{
-             if(Ship_Data_output[j,1] == Ship_Data_output[as.numeric(j+1),1] &&
-                Ship_Data_output[j,2] == Ship_Data_output[as.numeric(j+1),2]){
+             if(Ship_Data_output[j,1] == Ship_Data_output[as.numeric(j+1), 1] &&
+                Ship_Data_output[j,2] == Ship_Data_output[as.numeric(j+1), 2]){
         df_df[j, 1:3] <- Ship_Data_output[j, 1:3]
       } else {
         df_df[j, 1:3] <- as.numeric(NA)
@@ -85,7 +86,7 @@ Filter_by_ID <- function(x, y){
     if(nrow(df_df) > 0){
       for (j in 1:nrow(df_df)) {
         df_bin <- rbind(df_bin,
-                        df[as.numeric(df_df[j,3]):as.numeric(df_df[j,3]+1),])
+                        df[as.numeric(df_df[j, 3]):as.numeric(df_df[j,3]+1), ])
       }
 
     } 

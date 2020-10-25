@@ -10,14 +10,11 @@
 
 # Shiny UI-Home  ---------------------------------------------------------------
 
-semanticPage(
+shinyUI(
+  semanticPage(
   title = App_title,
-
-  Buttons_UI("Home"),
-  p(),
-  button("Home-Update_value",
-         "Refresh"),
-  p(),
-  leafletOutput("Home-ship_map")
   
+  sidebar("Home"),
+  Cards_data()
+)
 )

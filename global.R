@@ -14,6 +14,7 @@ App_title <- "Shiny_app_Apsilon"
 # Global Utility  --------------------------------------------------------------
 source("bin/Utility/Library.R")
 source("bin/Utility/Buttons.R")
+source("bin/www/index.R")
 
 # Global server settings  ------------------------------------------------------
 options(shiny.maxRequestSize = 1024 * 1024^2)
@@ -22,12 +23,11 @@ options(shiny.port = 7878)
 options(semantic.themes = TRUE)
 
 # Global settings  -------------------------------------------------------------
-Ships_Data <<- readRDS("Data/ship_trim.rds")
-Ship_list <<- tibble(unique(Ships_Data[,c('ship_type','SHIPNAME')]))
-
+source("bin/Utility/Read_Data.R")
 source("bin/Utility/Button_Settings.R")
 
 # Global Functions  ------------------------------------------------------------
 source("bin/Tools/Data_Collector.R")
+source("bin/Utility/Map_Logics.R")
 
 # Test Unit --------------------------------------------------------------------

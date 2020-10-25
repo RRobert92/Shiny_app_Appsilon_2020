@@ -30,17 +30,39 @@ sidebar <- function(id) {
 }
 
 Cards_data <- function(){
-  div(class="ui container",
-          cards(
-            class = "two",
-            div(class= "ui raised segment",
-            card(style = "width: 500px", 
-              div(class="content",
-                  div(class="header", "Ship Map"),
-                  p(),
-                  leafletOutput("Home-ship_map"))
-              ),
-            )
-            )
-          )
+  div(class="ui container", style = "margin-top: 50px",
+      cards(
+        class = "two",
+        
+        card(style = "width: 570px", 
+             div(class="content",
+                 div(class="header", "Vesel Map"),
+                 p(),
+                 leafletOutput("Home-ship_map"))
+        ),
+        card(style = "width: 500px", 
+             div(class="content",
+                 div(class="header", "Selected vessel statistic"),
+                 message_box(class = "floating", header = "Vessel average speed", ""),
+                 textOutput("Home-Avg_speed"),
+                 message_box(class = "floating", header = "Vessel traveled distance", ""),
+                 textOutput("Home-Full_distance"),
+                 p(),
+                 h3("Longest travel section"),
+                 message_box(class = "floating", header = "Vessel speed", content = ""),
+                 textOutput("Home-Long_speed"),
+                 message_box(class = "floating", header = "Vessel time", content = ""),
+                 textOutput("Home-Long_time"),
+                 message_box(class = "floating", header = "Vessel distance", content = ""),
+                 textOutput("Home-Long_distance")
+             )
+        ),
+        
+        card(style = "width: 1100px", 
+             div(class="content",
+                 div(class="header", "Selected vesel data points"),
+                 DT::dataTableOutput('Home-Ship_table'))
+        )
+      )
+  )
 }

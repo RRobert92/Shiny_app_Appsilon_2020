@@ -21,8 +21,8 @@
 Filter_by_ID <- function(x, y){
   
   Collected_points <- tibble()
-  Ship_Data_df <- read_rds(paste("Data/", x, ".rds", sep = ""))
-  Ship_Data_df <-  Ship_Data_df %>% filter(SHIPNAME %in% y)
+  Ship_Data_df <<- read_rds(paste("Data/", x, ".rds", sep = ""))
+  Ship_Data_df <<-  Ship_Data_df %>% filter(SHIPNAME %in% y)
   
   
   for (i in y) {
@@ -33,25 +33,34 @@ Filter_by_ID <- function(x, y){
     Ship_Data_output <- tibble()
     df_df <-tibble()
     
+    # Calculate segment distances and time
     while (j <= nrow(df)) {
       df_df <- as.matrix(df[j:as.numeric(j+1), 1:2])
+      
       tryCatch({
-             Ship_Data_output[j,1] <- round(as.numeric(geo_point_dist(df_df) ), 3)
+             Ship_Data_output[j,1] <- round(as.numeric(geo_point_dist(df_df)), 
+                                            3)
+             
       },
       warning = function(w){}
       )
       if(is.na(Ship_Data_output[j,1])){
+        
         Ship_Data_output[j,1] <- 0
       }
       
-      Ship_Data_output[j,2] <- round(as.numeric(df[as.numeric(j+1), "DATETIME"] - df[j, "DATETIME"]), 2)
+      Ship_Data_output[j,2] <- round(as.numeric(df[as.numeric(j+1), "DATETIME"] - df[j, "DATETIME"]), 
+                                     2)
       Ship_Data_output[j,3] <- j
+      
       j = j + 1
     }
     
+    # Find longes traveled distance
     df_df <- tibble()
     longest <- df[which.max(Ship_Data_output$...1):as.numeric(which.max(Ship_Data_output$...1)+1),]
     
+    # Find when the ship traveled the with the same speed over the same travel time
     j = 1
     while (j < nrow(Ship_Data_output)) {
       if(any(is.na(Ship_Data_output[j:as.numeric(j+1), 1:2]) == TRUE)){
@@ -59,7 +68,7 @@ Filter_by_ID <- function(x, y){
         df_df[j, 1:3] <- as.numeric(NA)
       } else{
              if(Ship_Data_output[j,1] == Ship_Data_output[as.numeric(j+1),1] &&
-         Ship_Data_output[j,2] == Ship_Data_output[as.numeric(j+1),2]){
+                Ship_Data_output[j,2] == Ship_Data_output[as.numeric(j+1),2]){
         df_df[j, 1:3] <- Ship_Data_output[j, 1:3]
       } else {
         df_df[j, 1:3] <- as.numeric(NA)
@@ -70,6 +79,8 @@ Filter_by_ID <- function(x, y){
       j = j + 1
     }
     df_df <- na.omit(df_df)
+    
+    # Collect data
     df_bin <- tibble()
     if(nrow(df_df) > 0){
       for (j in 1:nrow(df_df)) {
@@ -83,5 +94,10 @@ Filter_by_ID <- function(x, y){
                               Collected_points)
 
   }
+  assign("Ship_statistic",
+         tibble(DIST = sum(na.omit(Ship_Data_output$...1)),
+                TIME = sum(na.omit(Ship_Data_output$...2))),
+         envir = .GlobalEnv)
+  
   Collected_points
 }

@@ -21,7 +21,7 @@
 Filter_by_ID <- function(x, y){
   
   Collected_points <- tibble()
-  Ship_Data_df <-  Ships_Data %>% filter(ship_type == x)
+  Ship_Data_df <- read_rds(paste("Data/", x, ".rds", sep = ""))
   Ship_Data_df <-  Ship_Data_df %>% filter(SHIPNAME %in% y)
   
   
@@ -54,12 +54,18 @@ Filter_by_ID <- function(x, y){
     
     j = 1
     while (j < nrow(Ship_Data_output)) {
-      if(Ship_Data_output[j,1] == Ship_Data_output[as.numeric(j+1),1] &&
+      if(any(is.na(Ship_Data_output[j:as.numeric(j+1), 1:2]) == TRUE)){
+        
+        df_df[j, 1:3] <- as.numeric(NA)
+      } else{
+             if(Ship_Data_output[j,1] == Ship_Data_output[as.numeric(j+1),1] &&
          Ship_Data_output[j,2] == Ship_Data_output[as.numeric(j+1),2]){
         df_df[j, 1:3] <- Ship_Data_output[j, 1:3]
       } else {
         df_df[j, 1:3] <- as.numeric(NA)
+      } 
       }
+
       
       j = j + 1
     }

@@ -87,7 +87,7 @@ Filter_by_ID <- function(x, y){
       #                  Ship_Data_df[as.numeric(df_df[j, 3]):as.numeric(df_df[j,3]+1), ])
       #}
       df_same_travel <- tibble(Ship_Data_df[as.numeric(nrow(df_df)-1):nrow(df_df), ],
-                               ICON = "SAMETRLV")
+                               ICON = "Constant speed/time")
     } 
     Collected_points <- rbind(longest,
                               df_same_travel)

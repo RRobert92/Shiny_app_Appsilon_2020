@@ -25,19 +25,15 @@ Filter_by_ID <- function(x, y){
   Collected_points <- tibble()
   Ship_Data_df <<- read_rds(paste("Data/", x, ".rds", sep = ""))
   Ship_Data_df <<-  Ship_Data_df %>% filter(SHIPNAME %in% y)
-  
-  
-  for (i in y) {
-    df <- Ship_Data_df %>% filter(SHIPNAME == i)
-    df <- df[order(df$DATETIME), ]
+  Ship_Data_df <- Ship_Data_df[order(Ship_Data_df$DATETIME), ]
     
     j = 1
     Ship_Data_output <- tibble()
     df_df <-tibble()
     
     # Calculate segment distances and time
-    while (j <= nrow(df)) {
-      df_df <- as.matrix(df[j:as.numeric(j+1), 1:2])
+    while (j <= nrow(Ship_Data_df)) {
+      df_df <- as.matrix(Ship_Data_df[j:as.numeric(j+1), 1:2])
       
       tryCatch({
              Ship_Data_output[j, 1] <- round(as.numeric(geo_point_dist(df_df)), 
@@ -50,7 +46,7 @@ Filter_by_ID <- function(x, y){
         Ship_Data_output[j, 1] <- 0
       }
       
-      Ship_Data_output[j, 2] <- round(as.numeric(df[as.numeric(j+1), "DATETIME"] - df[j, "DATETIME"]), 
+      Ship_Data_output[j, 2] <- round(as.numeric(Ship_Data_df[as.numeric(j+1), "DATETIME"] - Ship_Data_df[j, "DATETIME"]), 
                                      2)
       Ship_Data_output[j, 3] <- j
       
@@ -59,9 +55,10 @@ Filter_by_ID <- function(x, y){
     
     # Find longest traveled distance
     df_df <- tibble()
-    longest <- df[which.max(Ship_Data_output$...1):as.numeric(which.max(Ship_Data_output$...1)+1), ]
+    longest <- tibble(Ship_Data_df[which.max(Ship_Data_output$...1):as.numeric(which.max(Ship_Data_output$...1)+1), ],
+                      ICON = "longest")
     
-    # Find when the ship traveled the with the same speed over the same travel time
+    # Find when the ship traveled with the same speed over the same travel time
     j = 1
     while (j < nrow(Ship_Data_output)) {
       if(any(is.na(Ship_Data_output[j:as.numeric(j+1), 1:2]) == TRUE)){
@@ -81,20 +78,20 @@ Filter_by_ID <- function(x, y){
     }
     df_df <- na.omit(df_df)
     
-    # Collect data
-    df_bin <- tibble()
+    # Collect data of the travel with the same speed and the same time for only 
+    # most recent one.
+    df_same_travel <- tibble()
     if(nrow(df_df) > 0){
-      for (j in 1:nrow(df_df)) {
-        df_bin <- rbind(df_bin,
-                        df[as.numeric(df_df[j, 3]):as.numeric(df_df[j,3]+1), ])
-      }
-
+      #for (j in 1:nrow(df_df)) {
+      #  df_bin <- rbind(df_bin,
+      #                  Ship_Data_df[as.numeric(df_df[j, 3]):as.numeric(df_df[j,3]+1), ])
+      #}
+      df_same_travel <- tibble(Ship_Data_df[as.numeric(nrow(df_df)-1):nrow(df_df), ],
+                               ICON = "SAMETRLV")
     } 
     Collected_points <- rbind(longest,
-                              df_bin,
-                              Collected_points)
+                              df_same_travel)
 
-  }
   assign("Ship_statistic",
          tibble(DIST = sum(na.omit(Ship_Data_output$...1)),
                 TIME = sum(na.omit(Ship_Data_output$...2))),

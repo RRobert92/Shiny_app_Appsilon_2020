@@ -25,8 +25,7 @@ sidebar <- function(id) {
           div(class="menu",
               a(class="item", 
                 dropdown_input(ns("ship_name_dropdown"),
-                               choices = Ship_name_list,
-                               type = "selection multiple"))
+                               choices = Ship_name_list))
               )
           ),
       

@@ -14,10 +14,12 @@ Map_server <- function(input, output, session){
                                         input[["ship_name_dropdown"]])
     
     output$ship_map <- renderLeaflet({
-      leaflet() %>% 
+      leaflet(Ship_data_selected) %>% 
         addProviderTiles(providers$Stamen.TonerLite,
-                         options = providerTileOptions(noWrap = TRUE)) %>% 
-        addMarkers(data = Ship_data_selected[1:2])
+                         options = providerTileOptions(noWrap = TRUE),) %>% 
+        addMarkers(~LON, ~LAT,
+                   label = ~ICON,
+                   popup = ~ICON)
     })
     
     output$Avg_speed <- renderText(paste(Ship_statistic[1, 1], "kn", sep = " "))
@@ -35,9 +37,9 @@ Map_server <- function(input, output, session){
       "min", sep = " "))
     
     output$Long_distance <- renderText(paste(paste(
-      round(geo_point_dist(as.matrix(Ship_data_selected[1:2, 1:2])),
+      round(as.numeric(geo_point_dist(as.matrix(Ship_data_selected[1:2, 1:2])) * 1000),
             2),
-      "km", sep = " ")))
+      "m", sep = " ")))
     
     output$Ship_table <- DT::renderDataTable({Ship_data_selected[c(1,2,4,5,9)]})
   })
